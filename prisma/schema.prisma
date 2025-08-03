@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,11 +13,202 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ==============================
+// Enums
+// ==============================
+
+enum ElementCategory {
+  Basic
+  Deviant
+  Special
+}
+
+enum ElementRelation {
+  Neutral
+  Affinity
+  Disaffinity
+}
+
+enum AttributeType {
+  Charisma
+  Dexterity
+  Intellect
+  Impetus
+  Strength
+  Talent
+  Vigor
+}
+
+enum DurationType {
+  Scene
+  Attack
+  Rounds
+}
+
+enum EffectType {
+  Buff
+  Debuff
+}
+
+enum ActionType {
+  FinalValue
+  DiceRolled
+}
+
+enum ModifierType {
+  BaseDamage
+  Damage
+  Condition
+  Area
+}
+
+// ==============================
+// Models
+// ==============================
+
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @map("_id") @default(auto()) @db.ObjectId
+  googleId String @unique
+  email String @unique
   name String
-  email String
-  created_at DateTime? @default(now())
+
+  sheets Sheet[]
 
   @@map("users")
+}
+
+model Sheet {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  race        String
+  description String
+
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+
+  maxMana   Int
+  mana      Int
+  maxHealth Int
+  health    Int
+
+  elements    ElementSheet[]
+  attributes  AttributeSheet[]
+  conditions  Condition[]
+  magics      Magic[]
+
+  @@map("sheets")
+}
+
+model Element {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  category  ElementCategory
+
+  @@map("elements")
+}
+
+model ElementSheet {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  level     Int
+  relation  ElementRelation
+
+  sheet     Sheet    @relation(fields: [sheetId], references: [id])
+  sheetId   String   @db.ObjectId
+
+  elementId   String   @db.ObjectId
+
+  @@map("elements-sheets")
+}
+
+model Attribute {
+  id            String        @id @map("_id") @db.ObjectId
+  name          String
+  
+  @@map("attributes")
+}
+
+model AttributeSheet {
+  id            String        @id @map("_id") @db.ObjectId
+  value         Int
+  currentValue  Int
+
+  sheet         Sheet         @relation(fields: [sheetId], references: [id])
+  sheetId       String        @db.ObjectId
+
+  attributeId   String        @db.ObjectId
+
+  @@map("attributes-sheets")
+}
+
+model Condition {
+  id              String     @id @map("_id") @db.ObjectId
+  name            String
+  cust            Int?
+  elementId       Int
+  elementLevel    Int
+  description     String?
+  shorDescription String?
+  type      DurationType
+  duration  Int?
+
+  DT              Int?
+
+  effects         Effect[]
+
+  sheet           Sheet      @relation(fields: [sheetId], references: [id])
+  sheetId         String     @db.ObjectId
+
+  @@map("conditions")
+}
+
+model Effect {
+  id          String        @id @map("_id") @db.ObjectId
+  tagert      AttributeType?
+  description String?
+  type        EffectType
+
+  actions      Action[]
+
+  conditionId String        @db.ObjectId
+  condition   Condition     @relation(fields: [conditionId], references: [id])
+
+  @@map("effects")
+}
+
+model Action {
+  id    String     @id @map("_id") @db.ObjectId
+  type  ActionType
+  value Int
+
+  effectId  String     @db.ObjectId
+  effect    Effect     @relation(fields: [effectId], references: [id])
+
+  @@map("actions")
+}
+
+model Magic {
+  id        String      @id @map("_id") @db.ObjectId
+  name      String
+  cust      Int
+
+  modifiers Modifier[]
+
+  sheet     Sheet       @relation(fields: [sheetId], references: [id])
+  sheetId   String      @db.ObjectId
+
+  @@map("magics")
+}
+
+model Modifier {
+  id          String        @id @map("_id") @db.ObjectId
+  type        ModifierType
+  elementId   Int
+  elementLevel Int
+
+  magic       Magic         @relation(fields: [magicId], references: [id])
+  magicId     String        @db.ObjectId
+
+  conditionId Int?
+
+  @@map("modifiers")
 }
