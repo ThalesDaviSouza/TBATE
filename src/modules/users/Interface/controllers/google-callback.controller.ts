@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getLoginUserFacade } from "../../users.module.js";
-import { TokenADapterGoogle } from "../../Infra/adapter/tokenAdapter/TokenAdapterGoogle.js";
+import { getLoginUserFacade, getTokenAdapter } from "../../users.module.js";
 
 export async function googleCallbackController(
   request: FastifyRequest,
@@ -10,7 +9,7 @@ export async function googleCallbackController(
   try {
     const loginUserFacade = getLoginUserFacade();
 
-    const token = await TokenADapterGoogle.getOAth2Token(request);
+    const token = await getTokenAdapter().getOAth2Token(request);
     
     loginUserFacade.LoginUser(token);
 

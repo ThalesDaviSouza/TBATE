@@ -1,6 +1,6 @@
 import { OAuth2Namespace, OAuth2Token } from "@fastify/oauth2";
-import { ITokenAdapter } from "../ITokenAdapter.js";
 import { FastifyRequest } from "fastify";
+import { TokenAdapter } from "../TokenAdapter.js";
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -8,7 +8,7 @@ declare module 'fastify' {
   }
 }
 
-export class TokenADapterGoogle extends ITokenAdapter {
+export class TokenADapterGoogle extends TokenAdapter {
   
   static async getOAth2Token(request: FastifyRequest): Promise<OAuth2Token> {
     const fastify = request.server;
