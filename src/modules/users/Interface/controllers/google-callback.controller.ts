@@ -1,12 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { OAuth2Namespace } from "@fastify/oauth2";
 import { getLoginUserFacade } from "../../users.module.js";
-
-declare module 'fastify' {
-  interface FastifyInstance {
-    googleOAuth2: OAuth2Namespace;
-  }
-}
+import { TokenADapterGoogle } from "../../Infra/adapter/tokenAdapter/TokenAdapterGoogle.js";
 
 export async function googleCallbackController(
   request: FastifyRequest,
@@ -14,15 +8,13 @@ export async function googleCallbackController(
 ) 
 {
   try {
-    const fastify = request.server;
-
     const loginUserFacade = getLoginUserFacade();
 
-    const token = await fastify.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request)
+    const token = await TokenADapterGoogle.getOAth2Token(request);
     
     loginUserFacade.LoginUser(token);
 
-    return reply.redirect('http://localhost:5173');
+    return reply.redirect(process.env.FRONT_URL!);
   } 
   catch (err) {
     console.error('Erro no callback do Google:', err);

@@ -1,6 +1,6 @@
 import { OAuth2Token } from "@fastify/oauth2";
 import { UserService } from "../../Domain/services/userService.js";
-import { TokenService } from "../../Domain/services/tokenService.js";
+import { TokenService } from "../../Infra/services/tokenService.js";
 import { CreateUserFacade } from "./createUserFacade.js";
 
 export class LoginUserFacade {

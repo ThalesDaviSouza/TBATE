@@ -1,6 +1,6 @@
 import { UserService } from "../../Domain/services/userService.js";
-import { CreateUserDto } from "../../Domain/dtos/createUserDto.js";
 import { prisma } from "../../../../prisma/index.js";
+import { CreateUserDto } from "../../Application/dtos/createUserDto.js";
 
 export class CreateUserFacade {
   constructor(

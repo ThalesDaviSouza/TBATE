@@ -3,8 +3,8 @@ import fastify from 'fastify';
 // Import Providers
 import { registerCorsProvider } from '../providers/cors.js';
 import { registerGoogleOAuth2Provider } from '../providers/auth/googleOAuth2.js';
+import { userRoutes } from '../../modules/users/Interface/routes.js';
 
-import { userRoutes } from '../../modules/users/interfaces/routes.js';
 
 export async function createServer() {
     const app = fastify({ logger: true });

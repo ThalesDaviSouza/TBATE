@@ -1,5 +1,5 @@
 import { prisma } from "../../../../prisma/index.js";
-import { CreateUserDto } from "../dtos/createUserDto.js";
+import { CreateUserDto } from "../../Application/dtos/createUserDto.js";
 
 export class UserService {
   async verifyUserExists(googleId: string): Promise<boolean>{

@@ -1,7 +1,7 @@
-import { CreateUserFacade } from "./Application/facades/createUserFacade.js";
-import { LoginUserFacade } from "./Application/facades/loginUserFacade.js";
-import { TokenService } from "./Domain/services/tokenService.js";
+import { TokenService } from "./Infra/services/tokenService.js";
 import { UserService } from "./Domain/services/userService.js";
+import { CreateUserFacade } from "./Infra/facades/createUserFacade.js";
+import { LoginUserFacade } from "./Infra/facades/loginUserFacade.js";
 
 const userService = new UserService();
 const tokenService = new TokenService();
@@ -15,4 +15,3 @@ export function getCreateUserFacade(){
 export function getLoginUserFacade(){
   return loginUserFacade;
 }
-
