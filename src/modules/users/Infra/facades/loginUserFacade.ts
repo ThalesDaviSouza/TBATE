@@ -27,22 +27,11 @@ export class LoginUserFacade {
     }
 
     const userId = await this.userService.getUserId(tokeInfo.id);
-
-    // TODO: implementar autenticação
-    
     const app = request.server;
 
-    const acessToken = app.jwt.sign({
-      id: userId,
-      email: tokeInfo.email,
-      name: tokeInfo.name 
-    }, { expiresIn: '1m' });
-
-    const refreshToken = app.jwt.sign({
-      id: userId,
-      type: 'refresh'
-    }, { expiresIn: '1m' });
-
+    const acessToken = this.tokenService.generateAcessToken(app, tokeInfo, userId);
+    const refreshToken =  this.tokenService.generateRefreshToken(app, userId);
+    
     this.refreshTokenService.save(refreshToken, userId);
 
     return acessToken;

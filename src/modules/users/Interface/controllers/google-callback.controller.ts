@@ -11,9 +11,7 @@ export async function googleCallbackController(
 
     const jwt = await loginUserFacade.LoginUser(request);
     loginUserFacade.SetCookie(reply, jwt);
-
-    console.log('jwt', jwt)
-
+    
     return reply.redirect(process.env.FRONT_URL!);
   } 
   catch (err) {

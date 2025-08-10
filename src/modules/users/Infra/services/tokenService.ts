@@ -1,4 +1,5 @@
 import { OAuth2Token } from "@fastify/oauth2";
+import { FastifyInstance } from "fastify";
 
 type GoogleUserInfo = {
   id: string,
@@ -26,5 +27,37 @@ export class TokenService {
     }
 
     return userInfo;
+  }
+
+  generateAcessToken(app: FastifyInstance, tokeInfo: GoogleUserInfo, userId: string){
+    return app.jwt.sign({
+      id: userId,
+      email: tokeInfo.email,
+      name: tokeInfo.name 
+    }, 
+    { 
+      expiresIn: '5s' 
+    });
+  }
+  
+  generateRefreshToken(app: FastifyInstance, userId: string){
+    return app.jwt.sign({
+      id: userId,
+      type: 'refresh'
+    }, 
+    { 
+      expiresIn: '5s' 
+    });
+  }
+
+  verifyTokenIsValid(app: FastifyInstance, tokenJwt: string): boolean{
+    try{
+      app.jwt.verify(tokenJwt);
+
+      return true;
+    }
+    catch{
+      return false;
+    }
   }
 }

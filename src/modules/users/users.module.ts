@@ -5,6 +5,7 @@ import { LoginUserFacade } from "./Infra/facades/loginUserFacade.js";
 import { TokenADapterGoogle } from "./Infra/adapter/tokenAdapter/TokenAdapterGoogle.js";
 import { TokenAdapter } from "./Infra/adapter/TokenAdapter.js";
 import { RefreshTokenService } from "./Domain/services/refreshTokenService.js";
+import { RefreshTokenFacade } from "./Infra/facades/refreshTokenFacade.js";
 
 const userService = new UserService();
 const refreshTokenService = new RefreshTokenService();
@@ -17,6 +18,10 @@ const loginUserFacade = new LoginUserFacade(
   createUserFacade, 
   refreshTokenService
 );
+const refreshTokenFacade = new RefreshTokenFacade(
+  refreshTokenService,
+  tokenService
+);
 
 export function getCreateUserFacade(){
   return createUserFacade;
@@ -28,4 +33,8 @@ export function getLoginUserFacade(){
 
 export function getTokenAdapter(): typeof TokenAdapter {
   return TokenADapterGoogle;
+}
+
+export function getRefreshTokenFacade(){
+  return refreshTokenFacade;
 }
