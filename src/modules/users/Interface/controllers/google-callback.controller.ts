@@ -10,7 +10,7 @@ export async function googleCallbackController(
     const loginUserFacade = getLoginUserFacade();
 
     const jwt = await loginUserFacade.LoginUser(request);
-    loginUserFacade.SetCookie(reply, jwt);
+    loginUserFacade.SetAcessToken(reply, jwt);
     
     return reply.redirect(process.env.FRONT_URL!);
   } 

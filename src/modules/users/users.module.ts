@@ -20,7 +20,9 @@ const loginUserFacade = new LoginUserFacade(
 );
 const refreshTokenFacade = new RefreshTokenFacade(
   refreshTokenService,
-  tokenService
+  tokenService,
+  userService,
+  loginUserFacade
 );
 
 export function getCreateUserFacade(){

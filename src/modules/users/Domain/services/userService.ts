@@ -1,5 +1,6 @@
 import { prisma } from "../../../../prisma/index.js";
 import { CreateUserDto } from "../../Application/dtos/createUserDto.js";
+import { UserInfoDto } from "../../Application/dtos/userInfoDto.js";
 
 export class UserService {
   async verifyUserExists(googleId: string): Promise<boolean>{
@@ -45,5 +46,23 @@ export class UserService {
       throw new Error("Usuário não localizado");
 
     return userId.id;
+  }
+  
+  async getUserInfo(userId: string) : Promise<UserInfoDto> {
+    const userInfo = await prisma.user.findUnique({
+      where: {
+        id: userId
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true
+      }
+    });
+
+    if(!userInfo)
+      throw new Error("Usuário não localizado");
+
+    return userInfo;
   }
 }

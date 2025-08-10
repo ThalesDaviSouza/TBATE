@@ -1,26 +1,38 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply } from "fastify";
 import { RefreshTokenService } from "../../Domain/services/refreshTokenService.js";
 import { TokenService } from "../services/tokenService.js";
+import { UserService } from "../../Domain/services/userService.js";
+import { LoginUserFacade } from "./loginUserFacade.js";
 
 export class RefreshTokenFacade {
   constructor(
     private readonly refreshTokenService: RefreshTokenService,
-    private readonly tokenService: TokenService
+    private readonly tokenService: TokenService,
+    private readonly userService: UserService,
+    private readonly loginUserFacade: LoginUserFacade,
   ) { }
-
-  async verifyCanGenerateNewToken(userId: string, app: FastifyInstance){
+  
+  async verifyCanGenerateNewToken(userId: string, app: FastifyInstance): Promise<boolean> {
     const refreshToken = await this.refreshTokenService.get(userId);
-
+    
     if(!refreshToken)
       throw new Error("O usuário não tem um refresh token gerado");
-
+    
     const valid = this.tokenService.verifyTokenIsValid(app, refreshToken.refreshToken);
+    
+    return valid;
+  }
+  
+  async generateNewToken(app: FastifyInstance, reply: FastifyReply, userId: string) {
+    const canRefresh = await this.verifyCanGenerateNewToken(userId as string, app);
 
-    if(valid)
-      console.log('O refresh token é valido');
-    else
-      console.log('O refresh token não é valido');
+    if(!canRefresh){
+      throw new Error("Refresh token expirado");
+    }
+
+    const userInfo = await this.userService.getUserInfo(userId);
+    const newAcessToken = await this.tokenService.generateAcessToken(app, userInfo.id, userInfo.email, userInfo.name);
+    this.loginUserFacade.SetAcessToken(reply, newAcessToken);
 
   }
-
 }

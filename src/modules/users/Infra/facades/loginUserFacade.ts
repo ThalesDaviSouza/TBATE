@@ -29,7 +29,7 @@ export class LoginUserFacade {
     const userId = await this.userService.getUserId(tokeInfo.id);
     const app = request.server;
 
-    const acessToken = this.tokenService.generateAcessToken(app, tokeInfo, userId);
+    const acessToken = this.tokenService.generateAcessToken(app, userId, tokeInfo.email, tokeInfo.name);
     const refreshToken =  this.tokenService.generateRefreshToken(app, userId);
     
     this.refreshTokenService.save(refreshToken, userId);
@@ -38,7 +38,7 @@ export class LoginUserFacade {
   }
 
   
-  async SetCookie(rep: FastifyReply, jwt: string) {
+  async SetAcessToken(rep: FastifyReply, jwt: string) {
     rep.setCookie('token', jwt, {
       httpOnly: true,
       secure: true,

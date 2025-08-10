@@ -29,14 +29,14 @@ export class TokenService {
     return userInfo;
   }
 
-  generateAcessToken(app: FastifyInstance, tokeInfo: GoogleUserInfo, userId: string){
+  generateAcessToken(app: FastifyInstance, userId: string, email: string, name: string){
     return app.jwt.sign({
       id: userId,
-      email: tokeInfo.email,
-      name: tokeInfo.name 
+      email: email,
+      name: name 
     }, 
     { 
-      expiresIn: '5s' 
+      expiresIn: '10m' 
     });
   }
   
@@ -46,7 +46,7 @@ export class TokenService {
       type: 'refresh'
     }, 
     { 
-      expiresIn: '5s' 
+      expiresIn: '1h' 
     });
   }
 
