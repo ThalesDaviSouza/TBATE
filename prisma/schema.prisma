@@ -74,6 +74,8 @@ model User {
 
   sheets Sheet[]
 
+  refreshToken RefreshToken?
+
   @@map("users")
 }
 
@@ -121,14 +123,14 @@ model ElementSheet {
 }
 
 model Attribute {
-  id            String        @id @map("_id") @db.ObjectId
+  id            String        @id @map("_id") @default(auto()) @db.ObjectId
   name          String
   
   @@map("attributes")
 }
 
 model AttributeSheet {
-  id            String        @id @map("_id") @db.ObjectId
+  id            String        @id @map("_id") @default(auto()) @db.ObjectId
   value         Int
   currentValue  Int
 
@@ -141,7 +143,7 @@ model AttributeSheet {
 }
 
 model Condition {
-  id              String     @id @map("_id") @db.ObjectId
+  id              String     @id @map("_id") @default(auto()) @db.ObjectId
   name            String
   cust            Int?
   elementId       Int
@@ -162,7 +164,7 @@ model Condition {
 }
 
 model Effect {
-  id          String        @id @map("_id") @db.ObjectId
+  id          String        @id @map("_id") @default(auto()) @db.ObjectId
   tagert      AttributeType?
   description String?
   type        EffectType
@@ -176,7 +178,7 @@ model Effect {
 }
 
 model Action {
-  id    String     @id @map("_id") @db.ObjectId
+  id    String     @id @map("_id") @default(auto()) @db.ObjectId
   type  ActionType
   value Int
 
@@ -187,7 +189,7 @@ model Action {
 }
 
 model Magic {
-  id        String      @id @map("_id") @db.ObjectId
+  id        String      @id @map("_id") @default(auto()) @db.ObjectId
   name      String
   cust      Int
 
@@ -200,7 +202,7 @@ model Magic {
 }
 
 model Modifier {
-  id          String        @id @map("_id") @db.ObjectId
+  id          String        @id @map("_id") @default(auto()) @db.ObjectId
   type        ModifierType
   elementId   Int
   elementLevel Int
@@ -211,4 +213,14 @@ model Modifier {
   conditionId Int?
 
   @@map("modifiers")
+}
+
+model RefreshToken {
+  id            String       @id @map("_id") @default(auto()) @db.ObjectId
+  refreshToken  String       @unique
+ 
+  user          User         @relation(fields: [userId], references: [id])
+  userId        String       @db.ObjectId @unique
+  
+  @@map("refreshtokens")
 }

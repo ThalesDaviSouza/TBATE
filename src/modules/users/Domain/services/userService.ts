@@ -30,4 +30,20 @@ export class UserService {
       throw error;
     }
   }
+
+  async getUserId(googleId: string) : Promise<string> {
+    const userId = await prisma.user.findUnique({
+      where: {
+        googleId: googleId
+      },
+      select: {
+        id: true
+      }
+    });
+
+    if(!userId)
+      throw new Error("Usuário não localizado");
+
+    return userId.id;
+  }
 }

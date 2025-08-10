@@ -9,9 +9,10 @@ export async function googleCallbackController(
   try {
     const loginUserFacade = getLoginUserFacade();
 
-    const token = await getTokenAdapter().getOAth2Token(request);
-    
-    loginUserFacade.LoginUser(token);
+    const jwt = await loginUserFacade.LoginUser(request);
+    loginUserFacade.SetCookie(reply, jwt);
+
+    console.log('jwt', jwt)
 
     return reply.redirect(process.env.FRONT_URL!);
   } 
