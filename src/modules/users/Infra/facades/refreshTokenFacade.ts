@@ -3,6 +3,7 @@ import { RefreshTokenService } from "../../Domain/services/refreshTokenService.j
 import { TokenService } from "../services/tokenService.js";
 import { UserService } from "../../Domain/services/userService.js";
 import { LoginUserFacade } from "./loginUserFacade.js";
+import { BadRequestError } from "../../../../shared/types/Errors/BadRequest.js";
 
 export class RefreshTokenFacade {
   constructor(
@@ -16,7 +17,7 @@ export class RefreshTokenFacade {
     const refreshToken = await this.refreshTokenService.get(userId);
     
     if(!refreshToken)
-      throw new Error("O usuário não tem um refresh token gerado");
+      throw new BadRequestError("O usuário não tem um refresh token gerado");
     
     const valid = this.tokenService.verifyTokenIsValid(app, refreshToken.refreshToken);
     
@@ -26,9 +27,9 @@ export class RefreshTokenFacade {
   async generateNewToken(app: FastifyInstance, reply: FastifyReply, userId: string) {
     const canRefresh = await this.verifyCanGenerateNewToken(userId as string, app);
 
-    if(!canRefresh){
-      throw new Error("Refresh token expirado");
-    }
+    if(!canRefresh)
+      throw new BadRequestError("Refresh token expirado");
+    
 
     const userInfo = await this.userService.getUserInfo(userId);
     const newAcessToken = await this.tokenService.generateAcessToken(app, userInfo.id, userInfo.email, userInfo.name);

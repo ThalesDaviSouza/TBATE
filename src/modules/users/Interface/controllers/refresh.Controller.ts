@@ -7,9 +7,9 @@ export async function refreshController(
 ) {  
   const userId = request.body as string;
   const app = request.server;
-
+  
   const refreshTokenFacade = getRefreshTokenFacade();
-  refreshTokenFacade.generateNewToken(app, reply, userId);
-
+  await refreshTokenFacade.generateNewToken(app, reply, userId);
+  
   return { message: 'Access token refreshed' }
 }

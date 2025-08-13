@@ -7,9 +7,13 @@ async function startServer() {
   await server.listen({
     port: parseInt(process.env.PORT!),
     host: process.env.HOST!
+  }, 
+  (err) => {
+    if(err)
+      server.log.error(err);
   });
 
-  console.log(`App is running on http://${process.env.HOST}:${process.env.PORT}`);
+  server.log.info(`App is running on http://${process.env.HOST}:${process.env.PORT}`);
 
 }
 

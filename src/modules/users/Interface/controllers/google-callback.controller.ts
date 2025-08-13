@@ -15,7 +15,7 @@ export async function googleCallbackController(
     return reply.redirect(process.env.FRONT_URL!);
   } 
   catch (err) {
-    console.error('Erro no callback do Google:', err);
-    return reply.status(500).send({ error: 'Erro no login com Google' });
+    request.server.log.error(err);
+    throw new Error('Erro no callback do Google:');
   }
 }

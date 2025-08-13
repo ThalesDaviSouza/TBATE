@@ -46,8 +46,7 @@ export class RefreshTokenService{
       
     }
     catch(error){
-      console.error("Erro durante a criação do refresh token");
-      throw error;
+      throw new Error("Erro ao verificar se existe um refresh token");
     }
   }
 
@@ -71,8 +70,7 @@ export class RefreshTokenService{
       
     }
     catch(error){
-      console.error("Erro durante o update do refresh token");
-      throw error;
+      throw new Error("Erro durante o update do refresh token");
     }
   }
 

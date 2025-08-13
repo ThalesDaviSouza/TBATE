@@ -8,6 +8,7 @@ import { registerAuthenticate } from '../providers/auth/authenticate.js';
 
 // Import Routes
 import { userRoutes } from '../../modules/users/Interface/routes.js';
+import { setErrorHandler } from './errorHandler.js';
 
 export async function createServer() {
     const app = fastify({ logger: true });
@@ -16,6 +17,7 @@ export async function createServer() {
     registerGoogleOAuth2Provider(app);
     registerTokenEssentials(app);
     registerAuthenticate(app);
+    setErrorHandler(app);
     
     app.register(userRoutes, { prefix: '/users' });
 
