@@ -24,16 +24,16 @@ export class RefreshTokenFacade {
     return valid;
   }
   
-  async generateNewToken(app: FastifyInstance, reply: FastifyReply, userId: string) {
+  async generateNewToken(app: FastifyInstance, reply: FastifyReply, userId: string): Promise<string> {
     const canRefresh = await this.verifyCanGenerateNewToken(userId as string, app);
 
     if(!canRefresh)
       throw new BadRequestError("Refresh token expirado");
-    
 
     const userInfo = await this.userService.getUserInfo(userId);
     const newAcessToken = await this.tokenService.generateAcessToken(app, userInfo.id, userInfo.email, userInfo.name);
     this.loginUserFacade.SetAcessToken(reply, newAcessToken);
 
+    return newAcessToken;
   }
 }

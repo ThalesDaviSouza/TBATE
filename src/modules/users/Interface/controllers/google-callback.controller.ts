@@ -12,7 +12,7 @@ export async function googleCallbackController(
     const jwt = await loginUserFacade.LoginUser(request);
     loginUserFacade.SetAcessToken(reply, jwt);
     
-    return reply.redirect(process.env.FRONT_URL!);
+    return reply.redirect(process.env.FRONT_URL! + process.env.SHEETS_PAGE!);
   } 
   catch (err) {
     request.server.log.error(err);

@@ -9,7 +9,11 @@ export async function refreshController(
   const app = request.server;
   
   const refreshTokenFacade = getRefreshTokenFacade();
-  await refreshTokenFacade.generateNewToken(app, reply, userId);
+  const jwt = await refreshTokenFacade.generateNewToken(app, reply, userId);
   
-  return { message: 'Access token refreshed' }
+  return reply.send({
+    success: true,
+    message: "Novo token gerado!",
+    token: jwt
+  });
 }

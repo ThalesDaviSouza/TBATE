@@ -42,8 +42,9 @@ export class LoginUserFacade {
     rep.setCookie('token', jwt, {
       httpOnly: true,
       secure: true,
+      sameSite: 'none',
       path: '/',
-      maxAge: 60 // 1 minuto
+      maxAge: 600 // 10 minuto
     })
   }
 }
