@@ -1,5 +1,5 @@
 import { OAuth2Token } from "@fastify/oauth2";
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyRequest } from "fastify";
 
 type GoogleUserInfo = {
   id: string,
@@ -59,5 +59,11 @@ export class TokenService {
     catch{
       return false;
     }
+  }
+
+  getUserIdFromToken(request: FastifyRequest){
+    const userId = (request.user as any).id;
+
+    return userId;
   }
 }

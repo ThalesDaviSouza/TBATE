@@ -9,6 +9,7 @@ import { registerAuthenticate } from '../providers/auth/authenticate.js';
 // Import Routes
 import { userRoutes } from '../../modules/users/Interface/routes.js';
 import { setErrorHandler } from './errorHandler.js';
+import { sheetsRoutes } from '../../modules/sheets/interface/routes.js';
 
 export async function createServer() {
     const app = fastify({ logger: true });
@@ -20,6 +21,7 @@ export async function createServer() {
     setErrorHandler(app);
     
     app.register(userRoutes, { prefix: '/users' });
+    app.register(sheetsRoutes, { prefix: '/sheets' });
 
     return app;
 }

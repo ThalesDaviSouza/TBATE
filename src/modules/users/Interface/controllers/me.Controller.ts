@@ -5,7 +5,7 @@ export async function meController(
   reply: FastifyReply
 ) 
 {
-  return {
+  return reply.send({
     user: request.user
-  }
+  });
 }

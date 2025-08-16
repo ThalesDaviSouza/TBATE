@@ -9,8 +9,7 @@ declare module 'fastify' {
 
 const CLIENT_ID = process.env.CLIENT_ID!;
 const GOOGLE_SECRET = process.env.GOOGLE_SECRET!;
-const HOST = process.env.HOST!;
-const PORT = process.env.PORT!;
+const SERVER_URL = process.env.SERVER_URL!;
 
 const googleOAuth2Options = {
   name: 'googleOAuth2',
@@ -24,7 +23,7 @@ const googleOAuth2Options = {
   // register a fastify url to start the redirect flow
   startRedirectPath: '/users/auth/google',
   // google redirect here after the user login
-  callbackUri: `http://${HOST}:${PORT}/users/auth/google/callback`,
+  callbackUri: `${SERVER_URL}/users/auth/google/callback`,
   scope: ['email', 'profile']
 }
 

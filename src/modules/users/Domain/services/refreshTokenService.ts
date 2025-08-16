@@ -50,7 +50,6 @@ export class RefreshTokenService{
     }
   }
 
-  
 
   private async _update(newRefreshToken: string, userId: string) : Promise<string> {
     try{
@@ -73,8 +72,6 @@ export class RefreshTokenService{
       throw new Error("Erro durante o update do refresh token");
     }
   }
-
-
 
   async get(userId: string): Promise<refreshToken | null>{
     const actualRefreshToken: refreshToken | null = await prisma.refreshToken.findUnique({
