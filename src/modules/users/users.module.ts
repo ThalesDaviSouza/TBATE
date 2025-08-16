@@ -40,3 +40,7 @@ export function getTokenAdapter(): typeof TokenAdapter {
 export function getRefreshTokenFacade(){
   return refreshTokenFacade;
 }
+
+export function getTokenService(){
+  return tokenService;
+}
