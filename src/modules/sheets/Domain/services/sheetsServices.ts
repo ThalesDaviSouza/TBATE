@@ -1,3 +1,4 @@
+import { Prisma, PrismaClient } from "@prisma/client";
 import { prisma } from "../../../../prisma/index.js";
 import { createSheetDto } from "../../Application/dtos/createSheetDto.js";
 
@@ -16,8 +17,13 @@ export class SheetsService {
     return sheets;
   }
 
-  async createSheet(dto: createSheetDto){
-    const sheet = await prisma.sheet.create({
+  async createSheet(dto: createSheetDto, tx?: Prisma.TransactionClient){
+    let db: PrismaClient | Prisma.TransactionClient = prisma;
+    
+    if(tx)
+      db = tx;
+
+    const sheet = await db.sheet.create({
       data: {
         name: dto.name!,
         userId: dto.userId!,

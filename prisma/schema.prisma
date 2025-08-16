@@ -124,7 +124,7 @@ model ElementSheet {
 
 model Attribute {
   id            String        @id @map("_id") @default(auto()) @db.ObjectId
-  name          String
+  name          String        @unique
   
   @@map("attributes")
 }
