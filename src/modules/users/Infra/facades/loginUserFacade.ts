@@ -2,8 +2,8 @@ import { UserService } from "../../Domain/services/userService.js";
 import { TokenService } from "../../Infra/services/tokenService.js";
 import { CreateUserFacade } from "./createUserFacade.js";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getTokenAdapter } from "../../users.module.js";
 import { RefreshTokenService } from "../../Domain/services/refreshTokenService.js";
+import { usersModule } from "../../users.module.js";
 
 export class LoginUserFacade {
   constructor(
@@ -14,7 +14,7 @@ export class LoginUserFacade {
   ) { }
 
   async LoginUser(request: FastifyRequest): Promise<string> {
-    const token = await getTokenAdapter().getOAth2Token(request);
+    const token = await usersModule.getTokenAdapter().getOAth2Token(request);
 
     const tokeInfo = await this.tokenService.getUserDataFromToken(token);
 

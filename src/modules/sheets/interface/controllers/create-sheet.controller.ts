@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getCreateSheetFacade } from "../../sheets.module.js";
+import { sheetsModule } from "../../sheets.module.js";
 
 export async function createSheetController(
   request: FastifyRequest,
@@ -7,8 +7,7 @@ export async function createSheetController(
 ) 
 {
   const characterName = request.body as string;
-  const createSheetFacade = getCreateSheetFacade();
-  await createSheetFacade.createSheet(
+  await sheetsModule.createSheetFacade.createSheet(
     request, 
     characterName
   );

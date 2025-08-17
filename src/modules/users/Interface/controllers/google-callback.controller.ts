@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getLoginUserFacade, getTokenAdapter } from "../../users.module.js";
+import { usersModule } from "../../users.module.js";
 
 export async function googleCallbackController(
   request: FastifyRequest,
@@ -7,10 +7,8 @@ export async function googleCallbackController(
 ) 
 {
   try {
-    const loginUserFacade = getLoginUserFacade();
-
-    const jwt = await loginUserFacade.LoginUser(request);
-    loginUserFacade.SetAcessToken(reply, jwt);
+    const jwt = await usersModule.loginUserFacade.LoginUser(request);
+    usersModule.loginUserFacade.SetAcessToken(reply, jwt);
     
     return reply.redirect(process.env.FRONT_URL! + process.env.SHEETS_PAGE!);
   } 

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getRefreshTokenFacade } from "../../users.module.js";
+import { usersModule } from "../../users.module.js";
 
 export async function refreshController(
   request: FastifyRequest,
@@ -8,8 +8,7 @@ export async function refreshController(
   const userId = request.body as string;
   const app = request.server;
   
-  const refreshTokenFacade = getRefreshTokenFacade();
-  const jwt = await refreshTokenFacade.generateNewToken(app, reply, userId);
+  const jwt = await usersModule.refreshTokenFacade.generateNewToken(app, reply, userId);
   
   return reply.send({
     success: true,

@@ -7,40 +7,42 @@ import { TokenAdapter } from "./Infra/adapter/TokenAdapter.js";
 import { RefreshTokenService } from "./Domain/services/refreshTokenService.js";
 import { RefreshTokenFacade } from "./Infra/facades/refreshTokenFacade.js";
 
-const userService = new UserService();
-const refreshTokenService = new RefreshTokenService();
 
-const tokenService = new TokenService();
-const createUserFacade = new CreateUserFacade(userService);
-const loginUserFacade = new LoginUserFacade(
-  userService, 
-  tokenService, 
-  createUserFacade, 
-  refreshTokenService
-);
-const refreshTokenFacade = new RefreshTokenFacade(
-  refreshTokenService,
-  tokenService,
-  userService,
-  loginUserFacade
-);
-
-export function getCreateUserFacade(){
-  return createUserFacade;
-}
-
-export function getLoginUserFacade(){
-  return loginUserFacade;
-}
-
-export function getTokenAdapter(): typeof TokenAdapter {
+function getTokenAdapter(): typeof TokenAdapter {
   return TokenADapterGoogle;
 }
 
-export function getRefreshTokenFacade(){
-  return refreshTokenFacade;
+function buildUsersModule() {
+  const userService = new UserService();
+  const refreshTokenService = new RefreshTokenService();
+
+  const tokenService = new TokenService();
+  const createUserFacade = new CreateUserFacade(userService);
+  const loginUserFacade = new LoginUserFacade(
+    userService, 
+    tokenService, 
+    createUserFacade, 
+    refreshTokenService
+  );
+  const refreshTokenFacade = new RefreshTokenFacade(
+    refreshTokenService,
+    tokenService,
+    userService,
+    loginUserFacade
+  );
+
+
+
+  return {
+    userService,
+    refreshTokenService,
+    tokenService,
+    createUserFacade,
+    loginUserFacade,
+    refreshTokenFacade,
+    getTokenAdapter
+  };
 }
 
-export function getTokenService(){
-  return tokenService;
-}
+
+export const usersModule = buildUsersModule();

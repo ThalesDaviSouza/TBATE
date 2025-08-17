@@ -1,13 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getGetSheetsFacade } from "../../sheets.module.js";
+import { sheetsModule } from "../../sheets.module.js";
 
 export async function getSheetsController(
   request: FastifyRequest,
   reply: FastifyReply
 ) 
 {
-  const getSheetsFacade = getGetSheetsFacade();
-  const sheets = await getSheetsFacade.getSheets(request);   
+  const sheets = await sheetsModule.getSheetsFacade.getSheets(request);   
 
   return reply.send({
     sheets: sheets

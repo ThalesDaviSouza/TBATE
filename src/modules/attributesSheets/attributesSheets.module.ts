@@ -1,14 +1,21 @@
-import { getAttributeService, getAttributeUtilsService } from "../attributes/attributes.module.js";
+import { attributesModule } from "../attributes/attributes.module.js";
 import { AttributesSheetsService } from "./Domain/services/attributesSheetsService.js";
 import { CreateAttributeSheetFacade } from "./Infra/Facades/createAttributeSheetFacade.js";
 
-const attributeUtilsService = getAttributeUtilsService();
-const attributeService = getAttributeService();
+function buildAttributesSheetsModule() {
 
-const attributeSheetService = new AttributesSheetsService();
+  const attributeSheetService = new AttributesSheetsService();
 
-const createAttributeSheetFacade = new CreateAttributeSheetFacade(attributeUtilsService, attributeService, attributeSheetService); 
+  const createAttributeSheetFacade = new CreateAttributeSheetFacade(
+    attributesModule.attributeUtilsService, 
+    attributesModule.attributeService, 
+    attributeSheetService
+  ); 
 
-export function getCreateAttributeSheetFacade(){
-  return createAttributeSheetFacade;
+  return {
+    attributeSheetService,
+    createAttributeSheetFacade,
+  };
 }
+
+export const attributesSheetsModule = buildAttributesSheetsModule();

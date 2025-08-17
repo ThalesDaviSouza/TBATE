@@ -1,23 +1,28 @@
-import { getCreateAttributeSheetFacade } from "../attributesSheets/attributesSheets.module.js";
-import { getTokenService } from "../users/users.module.js";
+import { attributesSheetsModule } from "../attributesSheets/attributesSheets.module.js";
+import { usersModule } from "../users/users.module.js";
 import { SheetsService } from "./Domain/services/sheetsServices.js";
 import { CreateSheetFacade } from "./Infra/Facade/createSheetFacade.js";
 import { GetSheetsFacade } from "./Infra/Facade/getSheetsFacade.js";
 
-const sheetsService = new SheetsService();
+function buildSheetsModule() {
+  const sheetsService = new SheetsService();
 
-const tokenService = getTokenService();
+  const getSheetsFacade = new GetSheetsFacade(
+    usersModule.tokenService,
+    sheetsService
+  );
 
-const createAttributeSheetFacade = getCreateAttributeSheetFacade();
+  const createSheetFacade = new CreateSheetFacade(
+    usersModule.tokenService, 
+    sheetsService, 
+    attributesSheetsModule.createAttributeSheetFacade
+  );
 
-const getSheetsFacade = new GetSheetsFacade(tokenService, sheetsService);
-const createSheetFacade = new CreateSheetFacade(tokenService, sheetsService, createAttributeSheetFacade);
-
-
-export function getGetSheetsFacade(){
-  return getSheetsFacade;
+  return {
+    sheetsService,
+    getSheetsFacade,
+    createSheetFacade,
+  };
 }
 
-export function getCreateSheetFacade(){
-  return createSheetFacade;
-}
+export const sheetsModule = buildSheetsModule();

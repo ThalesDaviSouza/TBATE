@@ -1,13 +1,14 @@
 import { AttributeService } from "./Domain/services/attributesService.js";
 import { AttributeUtilsService } from "./Infra/services/attributesUtilsService.js";
 
-const attributeUtilsService = new AttributeUtilsService();
-const attributeService = new AttributeService();
+function buildAttributesModule() {
+  const attributeUtilsService = new AttributeUtilsService();
+  const attributeService = new AttributeService();
 
-export function getAttributeUtilsService(){
-  return attributeUtilsService;
+  return {
+    attributeUtilsService,
+    attributeService
+  };
 }
 
-export function getAttributeService(){
-  return attributeService;
-}
+export const attributesModule = buildAttributesModule();
