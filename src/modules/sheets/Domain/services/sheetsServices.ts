@@ -10,7 +10,8 @@ export class SheetsService {
       },
       select: {
         userId: true,
-        name: true
+        name: true,
+        id: true
       }
     });
 
